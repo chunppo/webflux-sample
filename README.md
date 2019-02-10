@@ -29,3 +29,34 @@ class TraceIdFilter implements WebFilter {
 
         return just;
     }
+
+
+```
+  public Mono<ServerResponse> setCookie(ServerRequest serverRequest) {
+    ResponseCookie responseCookie = ResponseCookie.from("CHUNPPO_COOKIE", "chunppo").path("/").maxAge(Duration.ofHours(1)).build();
+
+    ServerResponse.BodyBuilder builder = ServerResponse.status(HttpStatus.OK);
+    builder.cookie(responseCookie);
+
+    ResultBean rb = new ResultBean();
+    rb.setResultMessage("SET COOKIE SUCCESS");
+
+    return builder.body(BodyInserters.fromObject(rb));
+  }
+
+  public Mono<ServerResponse> getCookie(ServerRequest serverRequest) {
+    return ServerResponse.ok().body(Mono.just(serverRequest.cookies()), MultiValueMap.class);
+  }
+
+  public Mono<ServerResponse> delCookie(ServerRequest serverRequest) {
+    ResponseCookie responseCookie = ResponseCookie.from("CHUNPPO_COOKIE", "chunppo").path("/").maxAge(0).build();
+
+    ServerResponse.BodyBuilder builder = ServerResponse.status(HttpStatus.OK);
+    builder.cookie(responseCookie);
+
+    ResultBean rb = new ResultBean();
+    rb.setResultMessage("DEL COOKIE SUCCESS");
+
+    return builder.body(BodyInserters.fromObject(rb));
+  }
+```
